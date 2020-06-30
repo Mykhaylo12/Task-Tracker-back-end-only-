@@ -1,0 +1,268 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="1.0.0" author="mykhailo.kramar">
+        <createTable tableName="users">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="first_name" type="VARCHAR(100)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="last_name" type="VARCHAR(100)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="password" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet id="1.0.1" author="mykhailo.kramar">
+        <createTable tableName="roles">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet id="1.0.2" author="mykhailo.kramar">
+        <createTable tableName="tasks">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(50)" defaultValue="NEW">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP" defaultValue="CURRENT_TIMESTAMP()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="assigned_to" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+    </changeSet>
+
+        <changeSet id="1.0.3" author="mykhailo.kramar">
+            <addForeignKeyConstraint baseColumnNames="user_id"
+                                     baseTableName="tasks"
+                                     constraintName="fk_users_tasks_users"
+                                     onDelete="CASCADE"
+                                     onUpdate="RESTRICT"
+                                     referencedColumnNames="id"
+                                     referencedTableName="users"/>
+        </changeSet>
+
+
+
+    <changeSet id="1.0.4" author="mykhailo.kramar">
+        <createTable tableName="user_roles">
+            <column name="user_id" type="BIGINT">
+            </column>
+            <column name="role_id" type="BIGINT">
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1.0.5" author="mykhailo.kramar">
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="user_roles"
+                                 constraintName="fk_user_roles_user"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+
+    <changeSet id="1.0.6" author="mykhailo.kramar">
+        <addForeignKeyConstraint baseColumnNames="role_id"
+                                 baseTableName="user_roles"
+                                 constraintName="fk_user_roles_roles"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="roles"/>
+    </changeSet>
+
+    <changeSet id="1.0.7" author="mykhailo.kramar">
+        <insert tableName="roles">
+            <column name="name" value="ROLE_USER"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="name" value="ROLE_ADMIN"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="1.0.8" author="mykhailo.kramar">
+        <insert tableName="users">
+            <column name="email" value="user1@gmail.com"/>
+            <column name="first_name" value="John"/>
+            <column name="last_name" value="Smith"/>
+            <column name="password" value="$2a$04$Yb7I1RkW/rJTxDp.9ugQHe5TK1Sx0cwZRDQX.xhQiJH1bhF9ucaC2"/>
+        </insert>
+        <insert tableName="users">
+            <column name="email" value="user2@gmail.com"/>
+            <column name="first_name" value="Tom"/>
+            <column name="last_name" value="Cruise"/>
+            <column name="password" value="$2a$04$Yb7I1RkW/rJTxDp.9ugQHe5TK1Sx0cwZRDQX.xhQiJH1bhF9ucaC2"/>
+        </insert>
+        <insert tableName="users">
+            <column name="email" value="user3@gmail.com"/>
+            <column name="first_name" value="Elon"/>
+            <column name="last_name" value="Musk"/>
+            <column name="password" value="$2a$04$Yb7I1RkW/rJTxDp.9ugQHe5TK1Sx0cwZRDQX.xhQiJH1bhF9ucaC2"/>
+        </insert>
+        <insert tableName="users">
+            <column name="email" value="admin1@gmail.com"/>
+            <column name="first_name" value="Admin"/>
+            <column name="last_name" value="Admin"/>
+            <column name="password" value="$2a$04$Yb7I1RkW/rJTxDp.9ugQHe5TK1Sx0cwZRDQX.xhQiJH1bhF9ucaC2"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="1.0.9" author="mykhailo.kramar">
+        <insert tableName="user_roles">
+            <column name="user_id" value="1"/>
+            <column name="role_id" value="1"/>
+        </insert>
+        <insert tableName="user_roles">
+            <column name="user_id" value="2"/>
+            <column name="role_id" value="1"/>
+        </insert>
+        <insert tableName="user_roles">
+            <column name="user_id" value="3"/>
+            <column name="role_id" value="1"/>
+        </insert>
+        <insert tableName="user_roles">
+            <column name="user_id" value="4"/>
+            <column name="role_id" value="2"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="1.0.10" author="mykhailo.kramar">
+        <insert tableName="tasks">
+            <column name="title" value="Send email"/>
+            <column name="description" value="Send email to Tom Cruise till tomorrow morning"/>
+            <column name="status" value="NEW"/>
+            <column name="created_by" value="user1@gmail.com"/>
+            <column name="assigned_to" value="user1@gmail.com"/>
+            <column name="user_id" value="1"/>
+
+        </insert>
+        <insert tableName="tasks">
+            <column name="title" value="Fix bug"/>
+            <column name="description" value="Fix bug in userservice layer in create method till Wednesday"/>
+            <column name="status" value="NEW"/>
+            <column name="created_by" value="user2@gmail.com"/>
+            <column name="assigned_to" value="user3@gmail.com"/>
+            <column name="user_id" value="3"/>
+        </insert>
+        <insert tableName="tasks">
+            <column name="title" value="Call client"/>
+            <column name="description" value="Call client John about time scope till Wednesday"/>
+            <column name="status" value="NEW"/>
+            <column name="created_by" value="user3@gmail.com"/>
+            <column name="assigned_to" value="user3@gmail.com"/>
+            <column name="user_id" value="3"/>
+        </insert>
+
+        <insert tableName="tasks">
+            <column name="title" value="Finish report"/>
+            <column name="description" value="Finish monthly time report till Friday"/>
+            <column name="status" value="IN_PROGRESS"/>
+            <column name="created_by" value="user1@gmail.com"/>
+            <column name="assigned_to" value="user2@gmail.com"/>
+            <column name="user_id" value="2"/>
+        </insert>
+        <insert tableName="tasks">
+            <column name="title" value="Update IDE"/>
+            <column name="description" value="Update Intellij IDEA till Friday to 2020.1 version"/>
+            <column name="status" value="IN_PROGRESS"/>
+            <column name="created_by" value="user3@gmail.com"/>
+            <column name="assigned_to" value="user1@gmail.com"/>
+            <column name="user_id" value="1"/>
+        </insert>
+        <insert tableName="tasks">
+            <column name="title" value="Clean folder"/>
+            <column name="description" value="Clean folder OTHER from unusable files"/>
+            <column name="status" value="IN_PROGRESS"/>
+            <column name="created_by" value="user1@gmail.com"/>
+            <column name="assigned_to" value="user1@gmail.com"/>
+            <column name="user_id" value="1"/>
+        </insert>
+
+        <insert tableName="tasks">
+            <column name="title" value="Create Docker"/>
+            <column name="description" value="Create docker compose file in task tracker application"/>
+            <column name="status" value="VIEW"/>
+            <column name="created_by" value="user2@gmail.com"/>
+            <column name="assigned_to" value="user2@gmail.com"/>
+            <column name="user_id" value="2"/>
+        </insert>
+        <insert tableName="tasks">
+            <column name="title" value="Create test"/>
+            <column name="description" value="Create tests for user controller"/>
+            <column name="status" value="VIEW"/>
+            <column name="created_by" value="user3@gmail.com"/>
+            <column name="assigned_to" value="user3@gmail.com"/>
+            <column name="user_id" value="3"/>
+        </insert>
+        <insert tableName="tasks">
+            <column name="title" value="Learn multithreading"/>
+            <column name="description" value="Learn multithreading(mutex)"/>
+            <column name="status" value="VIEW"/>
+            <column name="created_by" value="user1@gmail.com"/>
+            <column name="assigned_to" value="user3@gmail.com"/>
+            <column name="user_id" value="3"/>
+        </insert>
+
+        <insert tableName="tasks">
+            <column name="title" value="Create auto fulfilling"/>
+            <column name="description" value="Create auto fulfilling for MSSQL database on Monday"/>
+            <column name="status" value="DONE"/>
+            <column name="created_by" value="user2@gmail.com"/>
+            <column name="assigned_to" value="user1@gmail.com"/>
+            <column name="user_id" value="1"/>
+        </insert>
+        <insert tableName="tasks">
+            <column name="title" value="Party"/>
+            <column name="description" value="Find out who will go to corporate party"/>
+            <column name="status" value="DONE"/>
+            <column name="created_by" value="user1@gmail.com"/>
+            <column name="assigned_to" value="user1@gmail.com"/>
+            <column name="user_id" value="1"/>
+        </insert>
+        <insert tableName="tasks">
+            <column name="title" value="Task Tracker app"/>
+            <column name="description" value="Create Task Tracker app for interview"/>
+            <column name="status" value="DONE"/>
+            <column name="created_by" value="user1@gmail.com"/>
+            <column name="assigned_to" value="user1@gmail.com"/>
+            <column name="user_id" value="1"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
+
