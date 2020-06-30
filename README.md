@@ -31,6 +31,7 @@ Available functions for an admin only:
 * Maven 4.0.0
 * Slf4j
 * MySQL data base
+* Liquibase (for automatically fulfilling)
 <hr>
 
 ## <a name="developer-start"></a>For developer
